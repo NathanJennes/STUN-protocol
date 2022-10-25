@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <iostream>
 #include <random>
+#include <cstring>
 
 #include "StunResponse.h"
 #include "StunBindRequest.h"
@@ -93,24 +94,16 @@ StunResponse send_stun_request(const StunBindRequest &request)
 			tmp = response_data[6];
 			response_data[6] = response_data[7];
 			response_data[7] = tmp;
-			tmp = response_data[8];
-			response_data[8] = response_data[11];
-			response_data[11] = tmp;
-			tmp = response_data[9];
-			response_data[9] = response_data[10];
-			response_data[10] = tmp;
 
 			uint16_t port = *reinterpret_cast<uint16_t *>(&response_data[6]);
-			uint32_t ip = *reinterpret_cast<uint16_t *>(&response_data[8]);
-			char str[INET_ADDRSTRLEN];
-			bzero(str, INET_ADDRSTRLEN);
+			uint32_t ip = *reinterpret_cast<uint32_t *>(&response_data[8]);
+			char str[INET_ADDRSTRLEN + 1];
+			bzero(str, INET_ADDRSTRLEN + 1);
 			inet_ntop(AF_INET, &ip, str, INET_ADDRSTRLEN);
 
 			std::cout << "Sender port: " << port << std::endl;
 			std::cout << "Sender ip: " << str << std::endl;
 		}
-
-		short a = 0x1234;
 
 		uint16_t total_len = 4 + attrib_len;
 		if (total_len >= response_length)
