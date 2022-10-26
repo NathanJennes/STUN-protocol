@@ -9,7 +9,8 @@ LD_FLAGS	:=		-fsanitize=address
 SRCS_DIR	:=		src
 OBJS_DIR	:=		objs
 
-SRCS		:=		main.cpp StunBindRequest.cpp StunResponse.cpp
+SRCS		:=		main.cpp StunBindRequest.cpp StunResponse.cpp \
+					util/NetworkByteBuffer.cpp
 OBJS		:=		$(addprefix $(OBJS_DIR)/, $(SRCS:.cpp=.o))
 DEPENDS		:=		$(addprefix $(OBJS_DIR)/, $(SRCS:.cpp=.d))
 
