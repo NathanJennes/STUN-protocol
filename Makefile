@@ -3,13 +3,13 @@ MAKEFLAGS	+=		-rR
 NAME		:=		stun
 
 CXX			:=		g++
-CXX_FLAGS	:=		-Wall -Wextra -MD -std=c++17 -fsanitize=address
+CXX_FLAGS	:=		-Wall -Wextra -MD -std=c++17 -fsanitize=address -g
 LD_FLAGS	:=		-fsanitize=address
 
 SRCS_DIR	:=		src
 OBJS_DIR	:=		objs
 
-SRCS		:=		main.cpp StunBindRequest.cpp StunResponse.cpp \
+SRCS		:=		main.cpp StunBindRequest.cpp StunResponse.cpp stun_client.cpp \
 					util/NetworkByteBuffer.cpp
 OBJS		:=		$(addprefix $(OBJS_DIR)/, $(SRCS:.cpp=.o))
 DEPENDS		:=		$(addprefix $(OBJS_DIR)/, $(SRCS:.cpp=.d))
@@ -25,6 +25,7 @@ $(OBJS_DIR):
 	mkdir -p $(OBJS_DIR)
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.cpp
+	mkdir -p $(dir $@)
 	$(CXX) $(CXX_FLAGS) -c $< -o $@
 
 $(NAME): $(OBJS_DIR) $(OBJS)

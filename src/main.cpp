@@ -12,8 +12,7 @@
 
 #include "StunResponse.h"
 #include "StunBindRequest.h"
-
-#define STUN_PACKET_LEN 1024
+#include "stun_client.h"
 
 int sock;
 struct sockaddr_in address{};
@@ -21,8 +20,8 @@ struct sockaddr_in address{};
 StunResponse send_stun_request(const StunBindRequest &request)
 {
 	(void)request;
-	uint8_t message_header[STUN_PACKET_LEN];
-	memset(message_header, 0, STUN_PACKET_LEN);
+	uint8_t message_header[STUN_PACKET_SIZE];
+	memset(message_header, 0, STUN_PACKET_SIZE);
 
 	// Message type (0x0001 for bind request)
 	message_header[0] = 0;
@@ -51,7 +50,7 @@ StunResponse send_stun_request(const StunBindRequest &request)
 	}
 	std::cout << "sent !" << std::endl;
 
-	ssize_t bytes_read = read(sock, message_header, STUN_PACKET_LEN);
+	ssize_t bytes_read = read(sock, message_header, STUN_PACKET_SIZE);
 	if (bytes_read == -1) {
 		std::cout << "Error while reading message header from socket" << std::endl;
 	}
@@ -135,6 +134,7 @@ int main()
 
 	StunBindRequest request;
 	StunResponse response = send_stun_request(request);
+	StunResponse response2 = STUNClient::send(sock, request);
 
 	close(sock);
 	return 0;
