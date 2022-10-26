@@ -9,6 +9,7 @@
 #include <cstddef>
 #include <cstdio>
 
+// A ByteBuffer that holds bytes in network byte-order
 class NetworkByteBuffer
 {
 public:
