@@ -7,12 +7,12 @@
 
 #define STUN_PACKET_SIZE 1024 // resonable length
 
-#include "StunResponse.h"
-#include "StunBindRequest.h"
+#include "Response.h"
+#include "BindRequest.h"
 
-namespace STUNClient {
+namespace Stun {
 
-StunResponse send(int sock, const StunBindRequest &request);
+Response send(int sock, const BindRequest &request);
 
 }
 

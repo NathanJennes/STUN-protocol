@@ -3,16 +3,17 @@
 //
 
 #include "stun_client.h"
-#include "util/NetworkByteBuffer.h"
+#include "../util/NetworkByteBuffer.h"
 #include <random>
 #include <iostream>
 #include <unistd.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <cstring>
 
-namespace STUNClient {
+namespace Stun {
 
-StunResponse send(int sock, const StunBindRequest &request)
+Response send(int sock, const BindRequest &request)
 {
 	(void)request;
 
@@ -53,7 +54,8 @@ StunResponse send(int sock, const StunBindRequest &request)
 	uint16_t response_length = response_buffer.read_u16();
 	std::cout << "Message response is of length: " << response_length << std::endl;
 
-	std::cout << "Message response id: " << response_buffer.read_u64() << response_buffer.read_u64() << std::endl;
+	std::cout << "Message response id: " << response_buffer.read_u32() << response_buffer.read_u32();
+	std::cout << response_buffer.read_u32() << response_buffer.read_u32() << std::endl;
 
 	while (response_length) {
 		uint16_t attrib_type = response_buffer.read_u16();
@@ -81,7 +83,7 @@ StunResponse send(int sock, const StunBindRequest &request)
 		response_length -= total_len;
 	}
 
-	StunResponse response;
+	Response response;
 	return response;
 }
 

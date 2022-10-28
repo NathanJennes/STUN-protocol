@@ -1,8 +1,10 @@
 #ifndef STUN_TYPES_H
 #define STUN_TYPES_H
 
+namespace Stun {
+
 //https://www.rfc-editor.org/rfc/rfc3489#section-11.1
-enum class StunMessageType : short
+enum class MessageType : short
 {
 	BindingRequest = 0x0001,
 	BindingResponse = 0x0101,
@@ -13,7 +15,7 @@ enum class StunMessageType : short
 };
 
 //https://www.rfc-editor.org/rfc/rfc3489#section-11.2
-enum class StunAttributeType : short
+enum class AttributeType : short
 {
 	MappedAddress = 0x0001,
 	ResponseAddress = 0x0002,
@@ -27,5 +29,8 @@ enum class StunAttributeType : short
 	UnknownAttributes = 0x000a,
 	ReflectedFrom = 0x000b
 };
+
+
+}
 
 #endif

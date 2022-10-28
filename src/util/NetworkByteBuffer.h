@@ -14,7 +14,7 @@ class NetworkByteBuffer
 {
 public:
 	NetworkByteBuffer();
-	NetworkByteBuffer(size_t capacity);
+	explicit NetworkByteBuffer(size_t capacity);
 	NetworkByteBuffer(const NetworkByteBuffer &other);
 	~NetworkByteBuffer();
 	NetworkByteBuffer &operator=(const NetworkByteBuffer &other);
@@ -32,8 +32,6 @@ public:
 	uint16_t read_u16();
 	int32_t read_i32();
 	uint32_t read_u32();
-	int64_t read_i64();
-	uint64_t read_u64();
 
 	void write_i8(int8_t value);
 	void write_u8(uint8_t value);
@@ -41,8 +39,6 @@ public:
 	void write_u16(uint16_t value);
 	void write_i32(int32_t value);
 	void write_u32(uint32_t value);
-	void write_i64(int64_t value);
-	void write_u64(uint64_t value);
 
 	uint8_t *data() const { return _data; };
 	size_t size() const {return _size; };

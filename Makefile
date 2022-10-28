@@ -9,8 +9,9 @@ LD_FLAGS	:=		-fsanitize=address
 SRCS_DIR	:=		src
 OBJS_DIR	:=		objs
 
-SRCS		:=		main.cpp StunBindRequest.cpp StunResponse.cpp stun_client.cpp \
-					util/NetworkByteBuffer.cpp
+SRCS		:=		main.cpp \
+					util/NetworkByteBuffer.cpp \
+					Stun/BindRequest.cpp Stun/Response.cpp Stun/stun_client.cpp
 OBJS		:=		$(addprefix $(OBJS_DIR)/, $(SRCS:.cpp=.o))
 DEPENDS		:=		$(addprefix $(OBJS_DIR)/, $(SRCS:.cpp=.d))
 
@@ -30,6 +31,10 @@ $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.cpp
 
 $(NAME): $(OBJS_DIR) $(OBJS)
 	$(CXX) $(LD_FLAGS) $(OBJS) -o $(NAME)
+
+info:
+	@echo $(SRCS)
+	@echo $(OBJS)
 
 .PHONY: fclean
 fclean: clean

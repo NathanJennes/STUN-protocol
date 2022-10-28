@@ -7,6 +7,8 @@
 #include <stdexcept>
 #include <memory>
 #include <unistd.h>
+#include <cstring>
+#include <netinet/in.h>
 
 NetworkByteBuffer::NetworkByteBuffer()
 	:_data(nullptr), _capacity(0), _size(0), _cursor(0)
@@ -119,7 +121,7 @@ int32_t NetworkByteBuffer::read_i32()
 {
 	if (_capacity - _cursor < 4)
 		throw std::out_of_range("Couldn't read 4 byte from network byte buffer");
-	uint32_t value = ntohs(*reinterpret_cast<uint32_t *>(&_data[_cursor]));
+	uint32_t value = ntohl(*reinterpret_cast<uint32_t *>(&_data[_cursor]));
 	int32_t val = *reinterpret_cast<int32_t *>(&value);
 	_cursor += 4;
 	return val;
@@ -131,25 +133,6 @@ uint32_t NetworkByteBuffer::read_u32()
 		throw std::out_of_range("Couldn't read 4 byte from network byte buffer");
 	uint32_t val = ntohl(*reinterpret_cast<uint32_t *>(&_data[_cursor]));
 	_cursor += 4;
-	return val;
-}
-
-int64_t NetworkByteBuffer::read_i64()
-{
-	if (_capacity - _cursor < 8)
-		throw std::out_of_range("Couldn't read 8 byte from network byte buffer");
-	uint64_t value = ntohs(*reinterpret_cast<uint64_t *>(&_data[_cursor]));
-	int64_t val = *reinterpret_cast<int64_t *>(&value);
-	_cursor += 8;
-	return val;
-}
-
-uint64_t NetworkByteBuffer::read_u64()
-{
-	if (_capacity - _cursor < 8)
-		throw std::out_of_range("Couldn't read 8 byte from network byte buffer");
-	uint64_t val = ntohll(*reinterpret_cast<uint64_t *>(&_data[_cursor]));
-	_cursor += 8;
 	return val;
 }
 
@@ -208,25 +191,6 @@ void NetworkByteBuffer::write_u32(uint32_t value)
 	uint32_t *ptr = reinterpret_cast<uint32_t *>(&_data[_size]);
 	*ptr = htonl(value);
 	_size += 4;
-}
-
-void NetworkByteBuffer::write_i64(int64_t value)
-{
-	if (_capacity < _size + 8)
-		grow(_capacity + 8);
-	uint64_t *ptr = reinterpret_cast<uint64_t *>(&_data[_size]);
-	uint64_t unsigned_value = *reinterpret_cast<uint64_t *>(&value);
-	*ptr = htonll(unsigned_value);
-	_size += 8;
-}
-
-void NetworkByteBuffer::write_u64(uint64_t value)
-{
-	if (_capacity < _size + 8)
-		grow(_capacity + 8);
-	uint64_t *ptr = reinterpret_cast<uint64_t *>(&_data[_size]);
-	*ptr = htonll(value);
-	_size += 8;
 }
 
 void NetworkByteBuffer::grow(size_t new_capacity)

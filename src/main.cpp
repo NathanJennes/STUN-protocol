@@ -7,11 +7,10 @@
 #include <arpa/inet.h>
 #include <iostream>
 #include <unistd.h>
-#include <cstring>
 
-#include "StunResponse.h"
-#include "StunBindRequest.h"
-#include "stun_client.h"
+#include "Stun/Response.h"
+#include "Stun/BindRequest.h"
+#include "Stun/stun_client.h"
 
 int sock;
 struct sockaddr_in address{};
@@ -34,8 +33,8 @@ int main()
 		return 1;
 	}
 
-	StunBindRequest request;
-	StunResponse response = STUNClient::send(sock, request);
+	Stun::BindRequest request;
+	Stun::Response response = Stun::send(sock, request);
 
 	close(sock);
 	return 0;
